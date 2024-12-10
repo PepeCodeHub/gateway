@@ -1,8 +1,7 @@
 // Api/gateway/src/middleware/proxy.ts
 import type { FastifyInstance } from 'fastify';
 import { createRabbitMQMiddleware } from './rabbitmq';
-import { rabbitmqConfig } from '../config/rabbitmq.config';
-import { services } from '../config/services.config';
+import { rabbitmqConfig, services } from '../';
 
 export async function setupProxies(app: FastifyInstance) {
   // Register auth service routes

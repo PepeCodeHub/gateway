@@ -1,8 +1,4 @@
-import { setupProxies } from './src/middleware/proxy';
-import { errorHandler } from './src/middleware/error';
-import { authMiddleware } from './src/middleware/auth';
-import { rabbitMQService } from './src/services/rabbitmq.service';
-import { logger } from './src/utils/logger';
+import { setupProxies, errorHandler, authMiddleware, rabbitMQService, logger } from './src';
 import fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import helmet from '@fastify/helmet';

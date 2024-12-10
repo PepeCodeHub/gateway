@@ -1,5 +1,5 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import { rabbitMQService } from '../services/rabbitmq.service';
+import { rabbitMQService } from '../';
 
 export const authMiddleware = async (
   request: FastifyRequest,
