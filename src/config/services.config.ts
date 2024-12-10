@@ -1,6 +1,6 @@
 export const services = {
     auth: {
-      url: process.env.AUTH_SERVICE_URL || 'http://localhost:3001',
+      url: '/api/auth',
       queue: 'auth.service',
       pathRewrite: {
         '^/api/auth': ''
