@@ -8,8 +8,7 @@ export const authMiddleware = async (
   const token = request.headers.authorization?.split(' ')[1];
   
   if (!token) {
-    reply.code(401).send({ error: 'No token provided' });
-    return;
+    return reply.code(401).send({ error: 'No token provided' });
   }
 
   try {
@@ -20,12 +19,9 @@ export const authMiddleware = async (
     });
 
     if (!response.valid) {
-      reply.code(401).send({ error: 'Invalid token' });
-      return;
+      return reply.code(401).send({ error: 'Invalid token' });
     }
-
-    // request.user = response.user;
   } catch (error) {
-    reply.code(500).send({ error: 'Auth service error' });
+    return reply.code(500).send({ error: 'Auth service error' });
   }
 };
