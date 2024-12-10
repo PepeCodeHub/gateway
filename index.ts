@@ -24,7 +24,7 @@ app.register(rateLimit, {
 app.setErrorHandler(errorHandler);
 
 // Setup service proxies
-setupProxies(app);
+app.register(setupProxies);
 
 // Protected routes
 app.addHook('preHandler', authMiddleware);
