@@ -1,36 +1,19 @@
-import type { FastifyRequest, FastifyReply } from 'fastify';
-import { createProxyMiddleware } from 'http-proxy-middleware';
+// Api/gateway/src/middleware/proxy.ts
+import type { FastifyInstance } from 'fastify';
+import { createRabbitMQMiddleware } from './rabbitmq';
+import { rabbitmqConfig } from '../config/rabbitmq.config';
 import { services } from '../config/services.config';
-import { logger } from '../utils/logger';
 
-interface ProxyConfig {
-  target: string;
-  pathRewrite?: { [key: string]: string };
-  changeOrigin?: boolean;
-}
-
-interface ServiceConfig {
-  url: string;
-  pathRewrite?: { [key: string]: string };
-}
-
-export const setupProxies = (app: any) => {
-  Object.entries(services).forEach(([service, config]: [string, ServiceConfig]) => {
-    const proxyConfig: ProxyConfig = {
-      target: config.url,
-      pathRewrite: config.pathRewrite,
-      changeOrigin: true
-    };
-
-    app.register(async (fastify: any) => {
-      fastify.addHook('preHandler', async (request: FastifyRequest) => {
-        logger.info(`Proxying request to ${service}: ${request.url}`);
+export async function setupProxies(app: FastifyInstance) {
+  // Register auth service routes
+  app.register(async (instance) => {
+    Object.entries(services).forEach(([service, config]) => {
+      const middleware = createRabbitMQMiddleware({
+        queue: rabbitmqConfig.queues[service as keyof typeof rabbitmqConfig.queues],
+        routingKey: service
       });
-
-      fastify.register(createProxyMiddleware({
-        pathRewrite: { [`^/api/${service}`]: '' },
-        ...proxyConfig
-      }));
+      
+      instance.all(config.url, middleware);
     });
   });
-};
+}
