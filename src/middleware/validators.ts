@@ -8,6 +8,6 @@ export const validateRequest = async (
   try {
     await schema.validateAsync(request.body);
   } catch (error) {
-    reply.code(400).send({ error: 'Validation failed' });
+    reply.code(400).send({ message: 'Validation failed' });
   }
 };

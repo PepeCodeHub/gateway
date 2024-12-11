@@ -10,6 +10,6 @@ export const errorHandler = (
 
   const statusCode = error.statusCode || 500;
   reply.status(statusCode).send({
-    error: error.message || 'Internal Server Error'
+    message: error.message || 'Internal Server Error'
   });
 };

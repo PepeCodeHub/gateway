@@ -5,15 +5,14 @@ import { rabbitmqConfig } from '../config';
 import { services } from '../config';
 
 export async function setupProxies(app: FastifyInstance) {
-  // Register auth service routes
   app.register(async (instance) => {
     Object.entries(services).forEach(([service, config]) => {
-      const middleware = createRabbitMQMiddleware({
-        queue: rabbitmqConfig.queues[service as keyof typeof rabbitmqConfig.queues],
-        routingKey: service
-      });
-      
-      instance.all(config.url, middleware);
+      const basePath = `/${config.url}`;
+      const queue = rabbitmqConfig.queues[service as keyof typeof rabbitmqConfig.queues];
+      const routingKey = service;
+
+      instance.all(`${basePath}/*`, createRabbitMQMiddleware({ queue, routingKey }));
+      instance.all(`${basePath}`, createRabbitMQMiddleware({ queue, routingKey }));
     });
   });
 }

@@ -14,16 +14,16 @@ export const createRabbitMQMiddleware = (serviceConfig: ServiceConfig) => {
         action: request.method,
         path: request.url,
         body: request.body,
-        // user: request.user,
+        headers: request.headers,
       };
 
       const rpcClient = await rabbitMQService.createRPCClient(serviceConfig.queue);
       const response = await rpcClient(message);
 
-      reply.send(response);
+      reply.code(response.statusCode).send(response.data);
     } catch (error) {
       logger.error(`RabbitMQ middleware error: ${error}`);
-      reply.code(500).send({ error: 'Service unavailable' });
+      reply.code(500).send({ message: 'Service unavailable' });
     }
   };
 };

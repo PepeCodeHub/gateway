@@ -20,17 +20,29 @@ app.register(rateLimit, {
 app.setErrorHandler(errorHandler);
 
 // Setup service proxies
-app.register(setupProxies);
+app.register(setupProxies, { prefix: '/api' });
 
-// Protected routes
-app.addHook('preHandler', authMiddleware);
+// Add preHandler hook for protected routes
+app.addHook('preHandler', (request, reply, done) => {
+  authMiddleware(request, reply, done);
+});
+
+// Public health check endpoint
+app.get('/health', async () => {
+  return { status: 'ok' };
+});
+
+// Handle not found routes
+app.setNotFoundHandler((request, reply) => {
+  reply.code(404).send({ message: 'Not found' });
+});
 
 // Start server
 const start = async () => {
   try {
     await rabbitMQService.connect();
     await app.listen({ port: PORT as number });
-    logger.info('Gateway running on port 3000');
+    logger.info(`Gateway running on port ${PORT}`);
   } catch (err) {
     logger.error(err);
     process.exit(1);
