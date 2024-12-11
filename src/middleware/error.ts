@@ -1,5 +1,5 @@
 import type { FastifyError, FastifyRequest, FastifyReply } from 'fastify';
-import { logger } from '../';
+import { logger } from '../utils';
 
 export const errorHandler = (
   error: FastifyError,

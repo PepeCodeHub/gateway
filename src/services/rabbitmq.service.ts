@@ -1,5 +1,6 @@
 import amqp, { type Channel, type Connection } from 'amqplib';
-import { logger, rabbitmqConfig } from '../';
+import { logger } from '../utils';
+import { rabbitmqConfig } from '../config';
 
 export class RabbitMQService {
   private connection: Connection | null = null;

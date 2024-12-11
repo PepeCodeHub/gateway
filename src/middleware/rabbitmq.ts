@@ -1,5 +1,6 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import { rabbitMQService, logger } from '../';
+import { rabbitMQService } from '../services';
+import { logger } from '../utils';
 
 interface ServiceConfig {
   queue: string;
