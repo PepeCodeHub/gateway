@@ -5,6 +5,7 @@ import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 
 const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || 'localhost';
 const CORS = process.env.CORS || '*';
 
 const app = fastify({ logger: true });
@@ -41,7 +42,7 @@ app.setNotFoundHandler((request, reply) => {
 const start = async () => {
   try {
     await rabbitMQService.connect();
-    await app.listen({ port: PORT as number });
+    await app.listen({ port: PORT as number, host: HOST as string });
     logger.info(`Gateway running on port ${PORT}`);
   } catch (err) {
     logger.error(err);
